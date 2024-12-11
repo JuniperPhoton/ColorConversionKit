@@ -75,3 +75,15 @@ func inverse(matrix3x3: [Float]) throws -> [Float] {
     
     return inv;
 }
+
+/// Not intended to be used in production. There is a built-in function in simd for this.
+func multiply(left: [Float], right: [Float]) -> [Float] {
+    let l = createRowMajor(matrix3x3: left)
+    let r = createRowMajor(matrix3x3: right)
+    let result = l * r
+    return [
+        result.columns.0.x, result.columns.1.x, result.columns.2.x,
+        result.columns.0.y, result.columns.1.y, result.columns.2.y,
+        result.columns.0.z, result.columns.1.z, result.columns.2.z
+    ]
+}
