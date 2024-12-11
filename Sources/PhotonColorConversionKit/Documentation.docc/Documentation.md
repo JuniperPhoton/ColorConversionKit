@@ -34,5 +34,4 @@ If you are calibrating the color primaries, you can use ``calculateLinearRGBToCI
 and display images. For example, CIContext's default working space is linear sRGB,
 so if you are working in the default color space, the RGBA value sampled are already linear.
 
-> Currently the methods provided in this library are Swift only.
-You probably need to covner the code as C++/Metal version to use in Shader.
+> There are some corresponding Metal Methods in the `PhotonColorConversionKitC` target. For Swift, you use the `PhotonColorConversionKit` target.
