@@ -21,6 +21,9 @@ import simd
 /// 1. Use ``convertRGBToXYZ(rgb:matrix3x3:)`` to convert linear RGB to CIE XYZ.
 /// 2. The inverse of the matrix can be used to convert CIE XYZ to linear RGB using ``convertXYZToRGB(xyz:matrix3x3:)``.
 ///
+/// > Note: Normally this method can be called outside of shader, since the matrixes
+/// are fixed when converting between color spaces.
+///
 /// - parameter xr: x coords for the red primary.
 /// - parameter yr: y coords for the red primary.
 /// - parameter xg: x coords for the green primary.
