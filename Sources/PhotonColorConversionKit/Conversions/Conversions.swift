@@ -8,17 +8,33 @@ import simd
 /// ```swift
 /// let d65WhitePoint = [0.9505, 1.0, 1.0891]
 ///
-/// matrix = calculateLinearRGBToCIEXYZMatrix(xr: 0.64, yr: 0.33,
-///                                           xg: 0.30, yg: 0.60,
-///                                           xb: 0.1558, yb: 0.06,
-///                                           Xw: d65WhitePoint[0], Yw: d65WhitePoint[1], Zw: d65WhitePoint[2])
+/// matrix = calculateLinearRGBToCIEXYZMatrix(
+///   xr: 0.64, yr: 0.33,
+///   xg: 0.30, yg: 0.60,
+///   xb: 0.1558, yb: 0.06,
+///   Xw: d65WhitePoint[0], Yw: d65WhitePoint[1], Zw: d65WhitePoint[2]
+/// )
 /// ```
 ///
+/// The result matrix can be used to:
+///
+/// 1. Use ``convertRGBToXYZ(rgb:matrix3x3:)`` to convert linear RGB to CIE XYZ.
+/// 2. The inverse of the matrix can be used to convert CIE XYZ to linear RGB using ``convertXYZToRGB(xyz:matrix3x3:)``.
+///
+/// - parameter xr: x coords for the red primary.
+/// - parameter yr: y coords for the red primary.
+/// - parameter xg: x coords for the green primary.
+/// - parameter yg: y coords for the green primary.
+/// - parameter xb: x coords for the blue primary.
+/// - parameter yb: y coords for the blue primary.
 /// - parameter Xw: X for the white point.
 /// - parameter Yw: Y for the white point.
 /// - parameter Zw: Z for the white point.
+/// - returns: The 3x3 matrix for the transformation.
 ///
-/// See http://www.brucelindbloom.com/index.html?Eqn_RGB_XYZ_Matrix.html for more information.
+/// See [Eqn_RGB_XYZ_Matrix](http://www.brucelindbloom.com/index.html?Eqn_RGB_XYZ_Matrix.html) for more information about the algorithm.
+///
+/// For more information, visit the [sRGB](https://en.wikipedia.org/wiki/SRGB) and [CIE Color Space](https://en.wikipedia.org/wiki/CIE_1931_color_space#) wiki.
 public func calculateLinearRGBToCIEXYZMatrix(
     xr: Float, yr: Float,
     xg: Float, yg: Float,

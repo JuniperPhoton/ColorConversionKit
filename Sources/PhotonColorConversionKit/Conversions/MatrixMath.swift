@@ -7,14 +7,6 @@
 import simd
 import Foundation
 
-public struct MatrixOperationError: Error {
-    public let message: String
-    
-    init(message: String) {
-        self.message = message
-    }
-}
-
 public extension [Float] {
     /// Treat it self as a 3x3 matrix and inverse the matrix.
     ///
