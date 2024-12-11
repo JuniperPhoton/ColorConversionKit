@@ -24,5 +24,6 @@ let package = Package(
             name: "PhotonColorConversionKitTests",
             dependencies: ["PhotonColorConversionKit"]
         ),
-    ]
+    ],
+    swiftLanguageModes: [.v5]
 )
