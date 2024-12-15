@@ -1,5 +1,5 @@
 # PhotonColorConversionKit
 
-Provides some functions and extensions for converting RGB value to CIE Color Space.
+This package provides some functions in Swift and Metal Shading Language(MSL) for converting RGB value to CIE Color Space.
 
-Documentation: https://juniperphoton.github.io/PhotonColorConversionKit/documentation/photoncolorconversionkit/
+To know more about this Swift Package and its APIs, please visit [this Documentation built with Swift DocC](https://juniperphoton.github.io/PhotonColorConversionKit/documentation/photoncolorconversionkit/).
