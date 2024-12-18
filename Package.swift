@@ -7,7 +7,7 @@ let package = Package(
     name: "PhotonColorConversionKit",
     platforms: [
         .iOS(.v15),
-        .macOS(.v13)
+        .macOS(.v12)
     ],
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
