@@ -1,4 +1,5 @@
 import Foundation
+import CoreGraphics
 import simd
 
 /// Calculate the matrix for the linear RGB to CIE XYZ transformation.
@@ -7,14 +8,15 @@ import simd
 ///
 /// ```swift
 /// let d65WhitePoint = [0.9505, 1.0, 1.0891]
-///
-/// matrix = calculateLinearRGBToCIEXYZMatrix(
+/// let matrix = calculateLinearRGBToCIEXYZMatrix(
 ///   xr: 0.64, yr: 0.33,
 ///   xg: 0.30, yg: 0.60,
 ///   xb: 0.1558, yb: 0.06,
 ///   Xw: d65WhitePoint[0], Yw: d65WhitePoint[1], Zw: d65WhitePoint[2]
 /// )
 /// ```
+///
+/// To get the standard sRGB matrix, use ``createStandardSRGBMatrix()`` passing standard parameters.
 ///
 /// The result matrix can be used to:
 ///
@@ -83,7 +85,7 @@ public func gammaEncode(rgb: [Float]) -> [Float] {
 /// Convert linear RGB to CIE XYZ based on the matrix.
 ///
 /// - parameter rgb: Linear RGB value.
-/// - parameter matrix: The matrix for the transformation.
+/// - parameter matrix3x3: The matrix for the transformation.
 /// This can be calculated by ``calculateLinearRGBToCIEXYZMatrix(xr:yr:zr:xg:yg:zg:xb:yb:zb:Xw:Yw:Zw:)``.
 public func convertRGBToXYZ(rgb: [Float], matrix3x3: [Float]) -> (X: Float, Y: Float, Z: Float) {
     let matrix = createRowMajor(matrix3x3: matrix3x3)
@@ -94,7 +96,7 @@ public func convertRGBToXYZ(rgb: [Float], matrix3x3: [Float]) -> (X: Float, Y: F
 /// Convert CIE XYZ to linear RGB based on the matrix.
 ///
 /// - parameter xyz: XYZ value.
-/// - parameter matrix: The matrix for the transformation.
+/// - parameter matrix3x3: The matrix for the transformation.
 /// This can be calculated by ``calculateLinearRGBToCIEXYZMatrix(xr:yr:zr:xg:yg:zg:xb:yb:zb:Xw:Yw:Zw:)``. The matrix will
 /// be inversed internally.
 public func convertXYZToRGB(xyz: [Float], matrix3x3: [Float]) throws -> [Float] {
@@ -126,4 +128,34 @@ public func convertXYYToXYZ(xyy: (x: Float, y: Float, Y: Float)) -> (X: Float, Y
     let y = xyy.y
     let Y = xyy.Y
     return (x * Y / y, Y, (1 - x - y) * Y / y)
+}
+
+/// Convenient method to create the standard sRGB matrix.
+///
+/// See ``createConversionMatrix(colorPrimaries:whitePoint:)`` for more information.
+public func createStandardSRGBMatrix() -> [Float] {
+    return createConversionMatrix(colorPrimaries: .sRGB, whitePoint: CGColorSpace.d65WhitePoint)
+}
+
+/// Create a matrix for converting linear RGB to CIE XYZ.
+///
+/// - parameter colorPrimaries: The color primarires to use for the conversion.
+/// You can use ``ColorPrimaries/sRGB`` for the primaries in sRGB color space.
+///
+/// - parameter whitePoint: The white point to use for the conversion.
+/// You can use `CGColorSpace/d65WhitePoint` for the D65 white point.
+/// By default it uses `CGColorSpace/d65WhitePoint`.
+///
+/// - returns: The 3x3 matrix in row-major order.
+public func createConversionMatrix(
+    colorPrimaries: ColorPrimaries,
+    whitePoint: WhitePoint = CGColorSpace.d65WhitePoint
+) -> [Float] {
+    let matrix = calculateLinearRGBToCIEXYZMatrix(
+        xr: colorPrimaries.red.x, yr: colorPrimaries.red.y,
+        xg: colorPrimaries.green.x, yg: colorPrimaries.green.y,
+        xb: colorPrimaries.blue.x, yb: colorPrimaries.blue.y,
+        Xw: whitePoint.x, Yw: whitePoint.y, Zw: whitePoint.z
+    )
+    return matrix
 }
